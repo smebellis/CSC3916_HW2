@@ -53,7 +53,13 @@ router.post('/signup', function(req, res) {
         db.save(newUser); //no duplicate checking
         res.json({success: true, msg: 'Successfully created new user.'})
     }
-});
+}
+)
+    .all(function(req, res){
+        res.json({success: false, msg: 'This HTTP method is not supported.'});
+    }
+    )
+;
 
 router.post('/signin', function (req, res) {
     var user = db.findOne(req.body.username);
@@ -72,14 +78,14 @@ router.post('/signin', function (req, res) {
     }
 });
 
-router.route('/testcollection')
+router.route('/movies')
     .delete(authController.isAuthenticated, function(req, res) {
         console.log(req.body);
         res = res.status(200);
         if (req.get('Content-Type')) {
             res = res.type(req.get('Content-Type'));
         }
-        var o = getJSONObjectForMovieRequirement(req);
+        var o = getJSONObjectForMovieRequirement(req, "movie deleted");
         res.json(o);
     }
     )
@@ -89,10 +95,33 @@ router.route('/testcollection')
         if (req.get('Content-Type')) {
             res = res.type(req.get('Content-Type'));
         }
-        var o = getJSONObjectForMovieRequirement(req);
+        var o = getJSONObjectForMovieRequirement(req, "movie updated");
         res.json(o);
     }
-    );
+    )
+    .get(function (req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if(req.get('Content-Type')){
+            res = res.type(req.get('Content-Type'));
+        }
+        var o = getJSONObjectForMovieRequirement(req, "GET movies");
+        res.json(o);
+    }
+    )
+    .post(function (req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if(req.get('Content-Type')){
+            res = res.type(req.get('Content-Type'));
+        }
+        var o = getJSONObjectForMovieRequirement(req, "movie saved");
+        res.json(o);
+    });
+
+router.all('/', function (req) {
+    res.json({success: false, msg: 'This route is not supported.'});
+})
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
