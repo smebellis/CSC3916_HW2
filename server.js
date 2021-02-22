@@ -51,13 +51,13 @@ router.post('/signup', function(req, res) {
         };
 
         db.save(newUser); //no duplicate checking
-        res.json({success: true, msg: 'Successfully created new user.'})
+        res.json({success: true, msg: 'Successfully created new user.'});
     }
-}
+    }
 )
     .all(function(req, res){
-        res.json({success: false, msg: 'This HTTP method is not supported.'});
-    }
+            res.json({success: false, msg: 'This HTTP method is not supported.'});
+        }
     )
 ;
 
@@ -85,8 +85,10 @@ router.route('/movies')
         if (req.get('Content-Type')) {
             res = res.type(req.get('Content-Type'));
         }
-        var o = getJSONObjectForMovieRequirement(req, "movie deleted");
+        var o = getJSONObjectForMovieRequirement(req);
+        o.msg = "movie deleted";
         res.json(o);
+
     }
     )
     .put(authJwtController.isAuthenticated, function(req, res) {
@@ -95,7 +97,8 @@ router.route('/movies')
         if (req.get('Content-Type')) {
             res = res.type(req.get('Content-Type'));
         }
-        var o = getJSONObjectForMovieRequirement(req, "movie updated");
+        var o = getJSONObjectForMovieRequirement(req);
+        o.msg = "movie updated";
         res.json(o);
     }
     )
@@ -105,7 +108,8 @@ router.route('/movies')
         if(req.get('Content-Type')){
             res = res.type(req.get('Content-Type'));
         }
-        var o = getJSONObjectForMovieRequirement(req, "GET movies");
+        var o = getJSONObjectForMovieRequirement(req);
+        o.msg = "GET movies";
         res.json(o);
     }
     )
@@ -115,7 +119,8 @@ router.route('/movies')
         if(req.get('Content-Type')){
             res = res.type(req.get('Content-Type'));
         }
-        var o = getJSONObjectForMovieRequirement(req, "movie saved");
+        var o = getJSONObjectForMovieRequirement(req);
+        o.msg = "movie saved";
         res.json(o);
     });
 
